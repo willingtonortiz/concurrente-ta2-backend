@@ -13,17 +13,22 @@ func GenerateData() {
 		fmt.Println("Error al abrir el archivo")
 	}
 
-	for i := 0; i < 100; i++ {
+	rowsCount := 10000
+	dataCount := 5
+	classCount := 9
+	maxNumber := 1000000.0
+
+	for i := 0; i < rowsCount; i++ {
 		row := fmt.Sprintf("%d", i) + ","
 
-		for j := 0; j < 5; j++ {
+		for j := 0; j < dataCount+1; j++ {
 
-			if j == 4 {
-				val := rand.Int() % 3
-				row += fmt.Sprintf("%d", val) + "\n"
+			if j == dataCount {
+				class := rand.Int() % classCount
+				row += fmt.Sprintf("%d", class) + "\n"
 			} else {
 
-				val := rand.Float64() * 100
+				val := rand.Float64() * maxNumber
 				row += fmt.Sprintf("%f", val) + ","
 			}
 		}

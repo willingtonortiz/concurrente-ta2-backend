@@ -1,7 +1,9 @@
 package logic
 
 import (
+	"fmt"
 	"sort"
+	"time"
 
 	"github.com/willingtonortiz/knn-restapi/models"
 )
@@ -22,28 +24,43 @@ func (knn Knn) FindKNearest(
 		Components: it.Components,
 	}
 
-	for i := 0; i < size; i++ {
-		point := models.Point{
-			Components: elements[i].Components,
-		}
-		elements[i].Distance = calc.Calculate(currentElement, point)
+	// Cantidad de cores de mi PC
+	var coresCount int = 8
+	end := make(chan bool)
+
+	//Utilización de goroutines para hacer los cálculos
+	startTime := time.Now()
+	for i := 0; i < coresCount; i++ {
+		go func(id int) {
+			for j := id; j < size; j += coresCount {
+				point := models.Point{Components: elements[j].Components}
+				elements[j].Distance = calc.Calculate(currentElement, point)
+			}
+			end <- true
+		}(i)
 	}
 
-	// for i := 0; i < size; i++ {
-	// 	fmt.Printf("%f ", elements[i].Distance)
-	// }
+	for i := 0; i < coresCount; i++ {
+		<-end
+	}
+	printElapsedTime(startTime)
 
+	/* Sin utilizar goroutines */
+	//startTime := time.Now()
+	//for j := 0; j < size; j++ {
+	//	point := models.Point{Components: elements[j].Components}
+	//	elements[j].Distance = calc.Calculate(currentElement, point)
+	//}
+	//elapsed := time.Since(startTime)
+	//fmt.Printf("Tiempo de ejecución: %s\n", elapsed.String())
+
+	// Ordenando los elementos
 	sort.Sort(models.DistanceComparer(elements))
 
-	// fmt.Println()
-
-	// for i := 0; i < size; i++ {
-	// 	fmt.Printf("%f ", items[i].Distance)
-	// }
-
 	/* ===== Encontrar los k elementos y las clases ===== */
+	classesCount := 9
 	nearestElements := make([]models.Element, k)
-	counters := make([]int, k)
+	counters := make([]int, classesCount)
 
 	for i := 0; i < k; i++ {
 		nearestElements[i] = elements[i]
@@ -57,11 +74,16 @@ func (knn Knn) FindKNearest(
 			max = counters[i]
 			class = i
 		}
-
 	}
 
 	it.Class = class
 	// fmt.Printf("\nClass: %d", it.Class)
 
 	return it, nearestElements, elements
+}
+
+func printElapsedTime(startTime time.Time) {
+	elapsed := time.Since(startTime)
+
+	fmt.Printf("segundos=%f, milisegundos=%d, nanosegundos=%d\n", elapsed.Seconds(), elapsed.Milliseconds(), elapsed.Nanoseconds())
 }

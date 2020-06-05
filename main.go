@@ -63,7 +63,7 @@ func readData() models.Elements {
 }
 
 func testRoute(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome home!")
+	fmt.Fprintf(w, "Welcome to KNN API!")
 }
 
 // Retorna todos los items
@@ -138,43 +138,9 @@ func startServer() {
 }
 
 func main() {
-	// Leer los datos y tenerlos en memoria
-	// generator.GenerateData()
+	// Leer los datos del archivo
 	initialize()
+
+	// Iniciar el servidor
 	startServer()
 }
-
-/*
-func testKnn() {
-	knn := logic.Knn{}
-
-	var items = []models.Item{
-		{
-			Point: models.Point{[]float64{3, 0}},
-			Class: 0,
-		},
-		{
-			Point: models.Point{[]float64{4, 0}},
-			Class: 1,
-		},
-		{
-			Point: models.Point{[]float64{4, 0}},
-			Class: 1,
-		},
-		{
-			Point: models.Point{[]float64{4, 0}},
-			Class: 1,
-		},
-		{
-			Point: models.Point{[]float64{3, 0}},
-			Class: 0,
-		},
-	}
-
-	it := models.Item{
-		Point: models.Point{[]float64{0, 0}},
-	}
-
-	knn.FindKNearest(it, 5, items, logic.EuclideanDistanceCalculator{})
-}
-*/

@@ -69,7 +69,7 @@ func (knn Knn) FindKNearest(
 
 	class := 0
 	max := 0
-	for i := 0; i < k; i++ {
+	for i := 0; i < classesCount; i++ {
 		if max < counters[i] {
 			max = counters[i]
 			class = i

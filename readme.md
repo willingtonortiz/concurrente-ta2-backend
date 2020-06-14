@@ -4,7 +4,7 @@ Repositorio para el backend de la aplicación de la TA2 del curso de programaci�
 
 # Para ejecutar la aplicación deberá seguir los siguientes pasos
 * Clonar este repositorio en ambiente que tenga el lenguaje Golang
-* Ejecutar el comando go run main.go
+* Ejecutar el comando ```go run main.go```
 
 
 # Rutas creadas para la aplicación
